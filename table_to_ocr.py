@@ -31,6 +31,7 @@ for filename in os.listdir(folder_path):
     if filename.lower().endswith(".png"):
         image = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
         image_colored = cv2.imread(filename)
+        map_name = srf.find_map_name(image)
         image, image_colored = srf.find_tables(image, image_colored)
 
         cell_images_rows, headshots_images_rows = srf.extract_cell_images_from_table(image, image_colored)
@@ -38,15 +39,15 @@ for filename in os.listdir(folder_path):
         agents = srf.identify_agents(headshots_images_rows)
         output = srf.read_table_rows(cell_images_rows)
         merged_output = [
-            row[:1] + [agents[i]] + row[1:] if isinstance(agents[i], str) else row[:1] + agents[i] + row[1:]
+            [map_name] + row[:1] + [agents[i]] + row[1:] if isinstance(agents[i], str) else [map_name] + row[:1] + agents[i] + row[1:]
             for i, row in enumerate(output)
         ]
-        print(type(config_data['players']))
+
         # Filter rows where the team is "NOVO" (assuming team column is index 2)
         if config_data['teamSorting']:
-            filtered_output = [row for row in merged_output if config_data['team'] in row[0]]  # Adjust index as needed
+            filtered_output = [row for row in merged_output if config_data['team'] in row[1]]  # Adjust index as needed
         else:
-            filtered_output = [row for row in merged_output if any(player in row[0] for player in config_data['players'])]
+            filtered_output = [row for row in merged_output if any(player in row[1] for player in config_data['players'])]
 
         srf.write_csv(filtered_output)
 

@@ -10,13 +10,38 @@ import cv2
 import numpy as np
 import pytesseract
 import logging
-from tqdm import tqdm
 from agent_recognition import find_matching_agent, load_images_from_folder
 
 #Setting up tesseract - only needs this if you have directly installed tesseract (I think).
 pytesseract.pytesseract.tesseract_cmd = "tesseract"
 
 class functions:
+
+    def find_map_name(image):
+        """
+        Recognizes the map name from a VALORANT scoreboard screenshot.
+
+        Args:
+            image_path (str): Path to the screenshot image.
+
+        Returns:
+            str: Recognized map name or "Unknown" if not found.
+        """
+        # Apply thresholding to enhance text visibility
+        _, thresh = cv2.threshold(image, 150, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+        # Define a region where the map name is typically located (top-left area)
+        map_region = thresh[70:100, 50:300]  # Adjusted for standard VALORANT scoreboard
+
+        # Use Tesseract OCR to extract text
+        custom_config = r'--psm 6'  # PSM 6 treats text as a block
+        extracted_text = pytesseract.image_to_string(map_region, config=custom_config, lang='eng')
+
+        # Process extracted text and find a valid map name
+        map = extracted_text.replace("\n", " ").strip()
+
+
+        return map.split(" - ")[-1].capitalize()
 
     def find_tables(image, image_colored):
         """
