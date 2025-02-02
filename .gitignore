@@ -3,5 +3,6 @@
 /path
 /__pycache__
 /screenshots
+config.ini
 scoreboard.csv
 temp_headshot.png
