@@ -3,7 +3,7 @@ Extract Valorant end-game scoreboard data from screenshots and convert it into a
 
 ## How to use
 
-- Fill config.ini file with your TEAMTAG or PLAYERNAMES (so they script can filter enemies out!)
+- Fill config.ini file with your TEAMTAG or PLAYERNAMES (so the script can filter enemies out!)
 - Put your desired screenshots in the /screenshots folder
 - Run the script
 - All the stats from the screenshot are now copied in your clipboard and saved in scoreboard.cvs!
@@ -22,13 +22,12 @@ We've put together an example Google spreadsheet you can copy to keep track of y
 
 # References
 
-Lovely put together by Felox & summonN
-
-https://x.com/summonhalfa
-https://x.com/felox210
+Lovely put together by Felox (https://x.com/felox210) & summonN (https://x.com/summonhalfa)
 
 This version is expanded upon two other forks of existing tool, with the goal of updating them and making them accessible to everyone in the VAL scene.
+
 Thanks to Alex 'Aplox' Porter (twitter.com/_Aplox) for publishing the original concept.
+
 Thanks to isaacaudet for the agent recognition library.
 
 
