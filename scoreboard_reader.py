@@ -31,7 +31,7 @@ class functions:
         _, thresh = cv2.threshold(image, 150, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
         # Define a region where the map name is typically located (top-left area)
-        map_region = thresh[70:100, 50:300]  # Adjusted for standard VALORANT scoreboard
+        map_region = thresh[60:140, 60:300]  # Adjusted for standard VALORANT scoreboard
 
         # Use Tesseract OCR to extract text
         custom_config = r'--psm 6'  # PSM 6 treats text as a block
@@ -40,8 +40,10 @@ class functions:
         # Process extracted text and find a valid map name
         map = extracted_text.replace("\n", " ").strip()
 
-
-        return map.split(" - ")[-1].capitalize()
+        if map.split(" - ")[-1].capitalize() == "Hayen":
+            return "Haven"
+        else:
+            return map.split(" - ")[-1].capitalize()
 
     def find_tables(image, image_colored):
         """
