@@ -40,7 +40,7 @@ class functions:
         # Process extracted text and find a valid map name
         map = extracted_text.replace("\n", " ").strip()
 
-        if map.split(" - ")[-1].capitalize() == "Hayen":
+        if map.split(" - ")[-1].capitalize() == "Hayen": #TODO bandaid fix XD
             return "Haven"
         else:
             return map.split(" - ")[-1].capitalize()
