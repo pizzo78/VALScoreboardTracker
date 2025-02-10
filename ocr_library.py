@@ -582,6 +582,7 @@ class functions:
 
             # Identify the agent
             agent_name = find_matching_agent(temp_image_path, reference_images, agent_names)
+            agent_name = agent_name.capitalize() # Capitalization of Agent Name
             identified_agents.append(agent_name)
         # remove temp_headshot.png
         # os.remove(temp_image_path)
