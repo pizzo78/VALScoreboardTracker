@@ -5,7 +5,7 @@ Lots of code is utilised from https://github.com/eihli/image-table-ocr#org67b1fc
 '''
 import csv
 import math
-
+import difflib
 import cv2
 import numpy as np
 import pytesseract
@@ -15,14 +15,22 @@ from agent_recognition import find_matching_agent, load_images_from_folder
 #Setting up tesseract - only needs this if you have directly installed tesseract (I think).
 pytesseract.pytesseract.tesseract_cmd = "tesseract"
 
+#List of VALORANT Maps, for OCR purposes
+VALORANT_MAPS = ["Haven", "Fracture", "Bind", "Ascent", "Icebox", "Split", "Breeze", "Lotus", "Pearl", "Sunset", "Abyss"]
+
 class functions:
+
+    def get_most_similar(ocr_result, possible_names):
+        """Finds the closest match for an OCR result from a list of possible names."""
+        closest_match = difflib.get_close_matches(ocr_result, possible_names, n=1, cutoff=0.5)
+        return closest_match[0] if closest_match else "Unknown"
 
     def find_map_name(image):
         """
         Recognizes the map name from a VALORANT scoreboard screenshot.
 
         Args:
-            image_path (str): Path to the screenshot image.
+            image: Preprocessed OpenCV image.
 
         Returns:
             str: Recognized map name or "Unknown" if not found.
@@ -36,14 +44,21 @@ class functions:
         # Use Tesseract OCR to extract text
         custom_config = r'--psm 6'  # PSM 6 treats text as a block
         extracted_text = pytesseract.image_to_string(map_region, config=custom_config, lang='eng')
+        # print(f"OCR Extracted Text: '{extracted_text.strip()}'") Debug Prints
 
         # Process extracted text and find a valid map name
-        map = extracted_text.replace("\n", " ").strip()
+        # Remove newlines
+        extracted_map_name = extracted_text.replace("\n", " ").strip()
+        # Extract only the last word after "MAP - "
+        if "MAP -" in extracted_map_name:
+            extracted_map_name = extracted_map_name.split("MAP -")[-1].strip()
+         # print(f"Extracted Map Name: '{extracted_map_name}'") Debug Prints
 
-        if map.split(" - ")[-1].capitalize() == "Hayen": #TODO bandaid fix XD
-            return "Haven"
-        else:
-            return map.split(" - ")[-1].capitalize()
+        # Apply fuzzy matching to correct OCR errors
+        corrected_map_name = functions.get_most_similar(extracted_map_name.capitalize(), VALORANT_MAPS)
+        # print(f"Corrected Map Name: '{corrected_map_name}'") Debug Prints
+
+        return corrected_map_name
 
     def find_tables(image, image_colored):
         """
