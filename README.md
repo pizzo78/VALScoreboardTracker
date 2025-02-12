@@ -70,11 +70,9 @@ To add a new agent, add a **50x50 PNG portrait** named `agentname.png` to the `/
 Donations are a great way to support our work! This project will always remain **open-source and free-to-use**.
 
 <p align="center">
-  <form action="https://www.paypal.com/donate" method="post" target="_top">
-    <input type="hidden" name="hosted_button_id" value="DXG78P2TZUEJL" />
-    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
-    <img alt="" border="0" src="https://www.paypal.com/en_IT/i/scr/pixel.gif" width="1" height="1" />
-  </form>
+  <a href="https://www.paypal.com/donate?hosted_button_id=DXG78P2TZUEJL">
+    <img src="https://www.paypalobjects.com/en_US/IT/i/btn/btn_donateCC_LG.gif" alt="Donate with PayPal button" />
+  </a>
 </p>
 
 
