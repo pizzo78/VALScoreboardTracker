@@ -28,7 +28,7 @@ This tool has been tested on 16:9 English-language screenshots.
 The output should look something like this:
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/57774007/220700904-34984cfc-61cd-4004-b12f-9393d50e6664.png" width=500 alt="VALScoreboardTracker Example Table"/>
+  <img src="https://i.imgur.com/0FKyutH.png" width=1000 alt="VALScoreboardTracker Example Table"/>
 </p>
 
 The output is sorted alphabetically by name, ensuring all players with the same team tag are grouped together.
@@ -40,6 +40,13 @@ The output is sorted alphabetically by name, ensuring all players with the same 
 We've put together an example Google spreadsheet you can copy to keep track of your stats and fill with data from the tool:
 
 ➡️ [Example Scrim Tracker](https://docs.google.com/spreadsheets/d/1N7p1be3Yw2lM5oGfvo3qUTSEXE2f-QyXYMvSeXKH7sc/edit?gid=626882904#gid=626882904)
+
+<p align="center">
+  <img src="https://i.imgur.com/LqoWu6C.png" width=1000 alt="VALScoreboardTracker Example Tracker"/>
+</p>
+<p align="center">
+  <img src="https://i.imgur.com/9H8pRmg.png" width=1000 alt="VALScoreboardTracker Example Tracker"/>
+</p>
 
 ---
 
