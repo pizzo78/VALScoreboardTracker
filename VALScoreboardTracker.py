@@ -9,6 +9,7 @@ import pytesseract
 from config_parser import create_config, read_config
 from ocr_library import functions as srf
 import pyperclip
+from datetime import datetime
 
 # Setting up tesseract
 pytesseract.pytesseract.tesseract_cmd = "tesseract"
@@ -43,8 +44,9 @@ if os.path.exists(screenshot_folder) and os.path.isdir(screenshot_folder):
 
             agents = srf.identify_agents(headshots_images_rows)
             output = srf.read_table_rows(cell_images_rows)
+            current_date = datetime.now().strftime("%d/%m/%Y")
             merged_output = [
-                [map_name] + row[:1] + [agents[i]] + row[1:] if isinstance(agents[i], str) else [map_name] + row[:1] + agents[i] + row[1:]
+                 [current_date] + row[:1] + [map_name] + row[:1] + [agents[i]] + row[1:] if isinstance(agents[i], str) else [map_name] + row[:1] + agents[i] + row[1:]
                 for i, row in enumerate(output)
             ]
 
