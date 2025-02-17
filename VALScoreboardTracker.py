@@ -46,7 +46,7 @@ if os.path.exists(screenshot_folder) and os.path.isdir(screenshot_folder):
             output = srf.read_table_rows(cell_images_rows)
             current_date = datetime.now().strftime("%d/%m/%Y")
             merged_output = [
-                 [current_date] + row[:1] + [map_name] + row[:1] + [agents[i]] + row[1:] if isinstance(agents[i], str) else [map_name] + row[:1] + agents[i] + row[1:]
+                [current_date] + row[:1] + [map_name] + row[:1] + [agents[i]] + row[1:] if isinstance(agents[i], str) else [map_name] + row[:1] + agents[i] + row[1:]
                 for i, row in enumerate(output)
             ]
 
