@@ -17,7 +17,9 @@
 
 ### Example Screenshot
 
-![ss_1](https://user-images.githubusercontent.com/57774007/220695198-47f6b995-b1e4-4fc8-83f6-46325065e388.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/57774007/220695198-47f6b995-b1e4-4fc8-83f6-46325065e388.png" width=750 alt="VALScoreboardTracker Example Screenshot"/>
+</p>
 
 This tool has been tested on 16:9 English-language screenshots.
 
@@ -25,7 +27,9 @@ This tool has been tested on 16:9 English-language screenshots.
 
 The output should look something like this:
 
-![image](https://user-images.githubusercontent.com/57774007/220700904-34984cfc-61cd-4004-b12f-9393d50e6664.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/57774007/220700904-34984cfc-61cd-4004-b12f-9393d50e6664.png" width=500 alt="VALScoreboardTracker Example Table"/>
+</p>
 
 The output is sorted alphabetically by name, ensuring all players with the same team tag are grouped together.
 
@@ -43,9 +47,7 @@ We've put together an example Google spreadsheet you can copy to keep track of y
 
 Lovingly put together by **Felox** ([Twitter/X](https://x.com/felox210)) & **summonN** ([Twitter/X](https://x.com/summonhalfa)).
 
-This version expands upon two forks of an existing tool, updating them and making them accessible to the entire VAL scene.
-
-Special thanks to **Alex 'Aplox' Porter** ([Twitter/X](https://twitter.com/_Aplox)) for publishing the original concept and **isaacaudet** for the agent recognition library.
+<sub> Special thanks to [**Aplox**](https://twitter.com/_Aplox) for publishing the original version and **isaacaudet** for the agent recognition library. </sub>
 
 ---
 
@@ -56,6 +58,11 @@ Special thanks to **Alex 'Aplox' Porter** ([Twitter/X](https://twitter.com/_Aplo
 ---
 
 ## ❓ FAQ
+
+### 🔄 Is the tool up to date? / Is Agent X / Maps Y supported? 
+The tool is currently updated to VALORANT `Patch 10.0`. \
+The last added map was `Abyss`.\
+The last added agent was `Tejo`.
 
 ### 📥 How can I download the tool?
 Coming soon!
@@ -75,11 +82,5 @@ Donations are a great way to support our work! This project will always remain *
   </a>
 </p>
 
-
----
-
-### ⭐ If you find this project useful, consider giving it a **star** on GitHub!
-
----
 
 
