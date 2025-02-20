@@ -5,7 +5,7 @@ def create_config():
     config = configparser.ConfigParser()
 
     # Add sections and key-value pairs
-    config['General'] = {'team': 'NOVO', 'players': []}
+    config['General'] = {'team': 'NOVO', 'players': [], 'teamSorting': 'false', 'maps': ["Haven", "Fracture", "Bind", "Ascent", "Icebox", "Split", "Breeze", "Lotus", "Pearl", "Sunset", "Abyss"]}
 
     # Write the configuration to a file
     with open('config.ini', 'w') as configfile:
@@ -25,12 +25,14 @@ def read_config():
     team = config.get('General', 'team')
 
     players = json.loads(config.get('General', 'players'))
+    maps = json.loads(config.get('General', 'maps'))
 
     # Return a dictionary with the retrieved values
     config_values = {
         'teamSorting': teamSorting,
         'team': team,
         'players': players,
+        'maps': maps,
     }
 
     return config_values
