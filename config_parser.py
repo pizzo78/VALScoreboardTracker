@@ -25,14 +25,12 @@ def read_config():
     team = config.get('General', 'team')
 
     players = json.loads(config.get('General', 'players'))
-    maps = json.loads(config.get('General', 'maps'))
 
     # Return a dictionary with the retrieved values
     config_values = {
         'teamSorting': teamSorting,
         'team': team,
         'players': players,
-        'maps': maps,
     }
 
     return config_values

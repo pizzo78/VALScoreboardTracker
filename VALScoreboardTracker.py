@@ -20,6 +20,8 @@ folder_path = os.path.dirname(os.path.abspath(__file__))
 # Name of the folder for screenshots
 screenshot_folder = os.path.join(folder_path, "screenshots")
 
+#maps
+maps = ["Haven", "Fracture", "Bind", "Ascent", "Icebox", "Split", "Breeze", "Lotus", "Pearl", "Sunset", "Abyss"]
 if os.path.exists('config.ini'):
     config_data = read_config()
 else:
@@ -37,7 +39,7 @@ if os.path.exists(screenshot_folder) and os.path.isdir(screenshot_folder):
         if filename.lower().endswith(".png"):
             image = cv2.imread(file_path, cv2.IMREAD_GRAYSCALE)
             image_colored = cv2.imread(file_path)
-            map_name = srf.find_map_name(image, config_data['maps'])
+            map_name = srf.find_map_name(image, maps)
             image, image_colored = srf.find_tables(image, image_colored)
 
             cell_images_rows, headshots_images_rows = srf.extract_cell_images_from_table(image, image_colored)
