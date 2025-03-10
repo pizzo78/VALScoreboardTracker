@@ -46,14 +46,16 @@ if os.path.exists(screenshot_folder) and os.path.isdir(screenshot_folder):
             output = srf.read_table_rows(cell_images_rows)
             current_date = datetime.now().strftime("%d/%m/%Y")
             merged_output = [
-                [current_date] + row[:1] + [map_name] + row[:1] + [agents[i]] + row[1:] if isinstance(agents[i], str) else [map_name] + row[:1] + agents[i] + row[1:]
+                [current_date] + row[:1] + [map_name] + [agents[i]] + row[1:] if isinstance(agents[i], str) else [map_name] + row[:1] + agents[i] + row[1:]
                 for i, row in enumerate(output)
             ]
+
 
             # Filter rows based on team sorting
             if config_data['teamSorting']:
                 filtered_output = [row for row in merged_output if config_data['team'] in row[1]]
             else:
+                config_data['players'] = [player.replace(" ", "") for player in config_data['players']]
                 filtered_output = [row for row in merged_output if any(player in row[1] for player in config_data['players'])]
 
             srf.write_csv(filtered_output)
