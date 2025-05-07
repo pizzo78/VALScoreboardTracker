@@ -4,6 +4,7 @@ Code has been optimised for reading screenshots of final scoreboard in the game 
 Lots of code is utilised from https://github.com/eihli/image-table-ocr#org67b1fc2
 '''
 import os
+import sys
 import cv2
 import pytesseract
 from config_parser import create_config, read_config
@@ -14,22 +15,30 @@ from datetime import datetime
 # Setting up tesseract
 pytesseract.pytesseract.tesseract_cmd = "tesseract"
 
+def get_base_path():
+    if getattr(sys, 'frozen', False):
+        return os.path.dirname(sys.executable)
+    return os.path.dirname(os.path.abspath(__file__))
+
 # Get the folder path where the script is running
-folder_path = os.path.dirname(os.path.abspath(__file__))
+base_path = get_base_path()
 
 # Name of the folder for screenshots
-screenshot_folder = os.path.join(folder_path, "screenshots")
+screenshot_folder = os.path.join(base_path, "screenshots")
+config_path = os.path.join(base_path, "config.ini")
+scoreboard_path = os.path.join(base_path, "scoreboard.csv")
 
 #maps
 maps = ["Haven", "Fracture", "Bind", "Ascent", "Icebox", "Split", "Breeze", "Lotus", "Pearl", "Sunset", "Abyss"]
-if os.path.exists('config.ini'):
+
+if os.path.exists(config_path):
     config_data = read_config()
 else:
     config_data = create_config()
 
 # Ensure the old scoreboard is deleted at the start of the program
-if os.path.exists('scoreboard.csv'):
-    os.remove('scoreboard.csv')
+if os.path.exists(scoreboard_path):
+    os.remove(scoreboard_path)
 
 # Ensure the screenshot folder exists
 if os.path.exists(screenshot_folder) and os.path.isdir(screenshot_folder):
@@ -52,7 +61,6 @@ if os.path.exists(screenshot_folder) and os.path.isdir(screenshot_folder):
                 for i, row in enumerate(output)
             ]
 
-
             # Filter rows based on team sorting
             if config_data['teamSorting']:
                 filtered_output = [row for row in merged_output if config_data['team'] in row[1]]
@@ -61,10 +69,11 @@ if os.path.exists(screenshot_folder) and os.path.isdir(screenshot_folder):
                 filtered_output = [row for row in merged_output if any(player in row[1] for player in config_data['players'])]
 
             srf.write_csv(filtered_output)
+
 print("Done. Output written to scoreboard.csv.")
 
 # Read the contents of scoreboard.csv
-with open("scoreboard.csv", "r", encoding="utf-8") as file:
+with open(scoreboard_path, "r", encoding="utf-8") as file:
     scoreboard_data = file.read()
 # Copy to clipboard
 pyperclip.copy(scoreboard_data)
