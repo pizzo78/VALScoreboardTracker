@@ -4,9 +4,9 @@
 a = Analysis(
     ['VALScoreboardTracker.py'],
     pathex=[],
-    binaries=[],
-    datas=[('agent-images', 'agent-images'), ('config.ini', '.')],
-    hiddenimports=['PIL', 'numpy', 'cv2', 'configparser'],
+    binaries=[('Tesseract-OCR/tesseract.exe', 'Tesseract-OCR/'), ('Tesseract-OCR/*.dll', 'Tesseract-OCR/')],
+    datas=[('agent-images', 'agent-images'), ('config.ini', '.'), ('Tesseract-OCR/tessdata/*', 'Tesseract-OCR/tessdata/')],
+    hiddenimports=['pytesseract', 'PIL', 'numpy', 'cv2', 'configparser'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
