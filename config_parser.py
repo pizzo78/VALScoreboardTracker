@@ -16,7 +16,7 @@ def create_config():
         'team': 'NOVO',
         'players': [],
         'teamSorting': 'false',
-        'maps': ["Haven", "Fracture", "Bind", "Ascent", "Icebox", "Split", "Breeze", "Lotus", "Pearl", "Sunset", "Abyss"]
+        'maps': [],
     }
 
     # Get the absolute path for config.ini
@@ -42,12 +42,14 @@ def read_config():
     teamSorting = config.getboolean('General', 'teamSorting')
     team = config.get('General', 'team')
     players = json.loads(config.get('General', 'players'))
+    maps = json.loads(config.get('General', 'maps'))
     
     # Return a dictionary with the retrieved values
     config_values = {
         'teamSorting': teamSorting,
         'team': team,
         'players': players,
+        'maps': maps,
     }
     
     return config_values

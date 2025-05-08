@@ -28,13 +28,14 @@ screenshot_folder = os.path.join(base_path, "screenshots")
 config_path = os.path.join(base_path, "config.ini")
 scoreboard_path = os.path.join(base_path, "scoreboard.csv")
 
-#maps
-maps = ["Haven", "Fracture", "Bind", "Ascent", "Icebox", "Split", "Breeze", "Lotus", "Pearl", "Sunset", "Abyss"]
 
 if os.path.exists(config_path):
     config_data = read_config()
 else:
     config_data = create_config()
+
+#maps
+maps = config_data['maps'] 
 
 # Ensure the old scoreboard is deleted at the start of the program
 if os.path.exists(scoreboard_path):
@@ -71,10 +72,12 @@ if os.path.exists(screenshot_folder) and os.path.isdir(screenshot_folder):
             srf.write_csv(filtered_output)
 
 print("Done. Output written to scoreboard.csv.")
-
+# Remove the temporary headshot image if it exists
+os.remove(os.path.join(base_path, 'temp_headshot.png')) if os.path.exists(os.path.join(base_path, 'temp_headshot.png')) else None
 # Read the contents of scoreboard.csv
 with open(scoreboard_path, "r", encoding="utf-8") as file:
     scoreboard_data = file.read()
 # Copy to clipboard
 pyperclip.copy(scoreboard_data)
 print("Contents of scoreboard.csv copied to clipboard.")
+
