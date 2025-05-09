@@ -41,7 +41,7 @@ We've created a Google Spreadsheet template you can use to track your team's sta
 
 ### 📝 How to Use
 
-1. Make a copy of the example spreadsheet
+1. Make a copy of the example spreadsheet.
 2. Run the script locally with your screenshots to extract data.
 3. Paste the extracted data into the "Empty Sheet for copying data" (use ; as the separator to automatically split it into columns).
 4. Copy the clean data from the "Empty Sheet for copying data" into the main "Stats" sheet.
