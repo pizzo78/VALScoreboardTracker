@@ -39,6 +39,14 @@ The output is sorted alphabetically by name, ensuring all players with the same 
 
 We've put together an example Google spreadsheet you can copy to keep track of your stats and fill with data from the tool:
 
+### 📝 How to Use
+
+1. Make a copy of the example spreadsheet
+2. Run the script with your screenshots locally to get data
+3. Use the empty sheet to copy paste data (use ; separator for automatic column separation)
+4. Copy the clean data to the main "Stats" sheet
+5. Replace the names in the yellow tables with your player names
+
 ➡️ [Example Scrim Tracker](https://docs.google.com/spreadsheets/d/1N7p1be3Yw2lM5oGfvo3qUTSEXE2f-QyXYMvSeXKH7sc/edit?gid=626882904#gid=626882904)
 
 <p align="center">
@@ -56,14 +64,6 @@ Lovingly put together by **Felox** ([Twitter/X](https://x.com/felox210)) & **sum
 
 <sub> Special thanks to [**Aplox**](https://twitter.com/_Aplox) for publishing the original version and **isaacaudet** for the agent recognition library. </sub>
 
----
-
-## 🔧 Prerequisites
-
-*Pending: summonN, you have to write this section!* 😆
-
----
-
 ## ❓ FAQ
 
 ### 🔄 Is the tool up to date? / Is Agent X / Maps Y supported? 
@@ -72,7 +72,7 @@ The last added map was `Abyss`.\
 The last added agent was `Tejo`.
 
 ### 📥 How can I download the tool?
-Coming soon!
+Download the latest version from our [GitHub Releases](https://github.com/Felox210/VALScoreboardTracker/releases/tag/stable) page.
 
 ### 🗺️ How can I add new maps?
 To add a new map, add the map name to `VALORANT_MAPS` in the `config.ini` file.
