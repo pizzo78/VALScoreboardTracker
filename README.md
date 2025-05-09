@@ -37,15 +37,15 @@ Download the latest version from our [GitHub Releases](https://github.com/Felox2
 
 ## 📊 Example Scrim Tracker Spreadsheet
 
-We've put together an example Google spreadsheet you can copy to keep track of your stats and fill with data from the tool:
+We've created a Google Spreadsheet template you can use to track your team's stats. Here's how to use it.
 
 ### 📝 How to Use
 
 1. Make a copy of the example spreadsheet
-2. Run the script with your screenshots locally to get data
-3. Use the empty sheet to copy paste data (use ; separator for automatic column separation)
-4. Copy the clean data to the main `Stats` sheet
-5. Replace the names in the yellow tables with your player names
+2. Run the script locally with your screenshots to extract data.
+3. Paste the extracted data into the "Empty Sheet for copying data" (use ; as the separator to automatically split it into columns).
+4. Copy the clean data from the "Empty Sheet for copying data" into the main "Stats" sheet.
+5. Replace the placeholder names in the yellow tables with your actual player names.
 
 ➡️ [Example Scrim Tracker](https://docs.google.com/spreadsheets/d/1N7p1be3Yw2lM5oGfvo3qUTSEXE2f-QyXYMvSeXKH7sc/edit?gid=626882904#gid=626882904)
 
