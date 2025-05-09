@@ -8,6 +8,9 @@
   Extract Valorant end-game scoreboard data from screenshots and convert it into a CSV, optimized for team environments. 
 </p>
 
+### 📥 Download Page
+Download the latest version from our [GitHub Releases](https://github.com/Felox210/VALScoreboardTracker/releases/tag/stable) page.
+
 ## 🚀 How to Use
 
 1. Fill `config.ini` file with your `TEAMTAG` or `PLAYERNAMES`*.
@@ -23,11 +26,8 @@
   <img src="https://i.imgur.com/Cp6F15I.png" width=750 alt="VALScoreboardTracker Example Screenshot"/>
 </p>
 
-This tool has been tested on 16:9 English-language screenshots.
 
-### Sample Output
-
-The output should look something like this:
+### Example Output
 
 <p align="center">
   <img src="https://i.imgur.com/0FKyutH.png" width=1000 alt="VALScoreboardTracker Example Table"/>
@@ -55,6 +55,9 @@ We've put together an example Google spreadsheet you can copy to keep track of y
 <p align="center">
   <img src="https://i.imgur.com/9H8pRmg.png" width=1000 alt="VALScoreboardTracker Example Tracker"/>
 </p>
+<p align="center">
+  <img src="https://i.imgur.com/uIJxuQW.png" width=1000 alt="VALScoreboardTracker Example Tracker"/>
+</p>
 
 ---
 
@@ -64,9 +67,11 @@ Lovingly put together by **Felox** ([Twitter/X](https://x.com/felox210)) & **sum
 
 <sub> Special thanks to [**Aplox**](https://twitter.com/_Aplox) for publishing the original version and **isaacaudet** for the agent recognition library. </sub>
 
+---
+
 ## ❓ FAQ
 
-### 🔄 Is the tool up to date? / Is Agent X / Maps Y supported? 
+### 🔄 Is the tool up to date? Is Agent X / Maps Y supported? 
 The tool is currently updated to VALORANT `Patch 10.0`. \
 The last added map was `Abyss`.\
 The last added agent was `Tejo`.
