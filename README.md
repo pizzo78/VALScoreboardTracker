@@ -20,7 +20,7 @@ Download the latest version from our [GitHub Releases](https://github.com/Felox2
 1. Fill `config.ini` file with your `TEAMTAG` or `PLAYERNAMES`*.
 2. Place your desired screenshots in the `/screenshots` folder.
 3. Run `VALScoreboardTracker.exe`.
-4. All the stats from the screenshot are now copied to your clipboard and saved in `scoreboard.csv`!
+4. All the stats from the screenshots are now copied to your clipboard and saved in `scoreboard.csv`!
 5. Fill your Scrim Tracker with the data and enjoy! 🤙🏼
 
 *\* (if teamsorting is set to true, it will look for the team tag in the screenshots. if it is set to false, it will look for the exact player names matches)*
