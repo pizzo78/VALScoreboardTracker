@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  Extract Valorant end-game scoreboard data from screenshots and convert it into a CSV, optimized for team environments. 
+  Extract Valorant end-game scoreboard data from 16:9 english screenshots and convert it into a CSV, optimized for team environments. 
 </p>
 
 ### 📥 Download Page
@@ -18,12 +18,13 @@ Download the latest version from our [GitHub Releases](https://github.com/Felox2
 ## 🚀 How to Use
 
 1. Fill `config.ini` file with your `TEAMTAG` or `PLAYERNAMES`*.
-2. Place your desired screenshots in the `/screenshots` folder.
+2. Place your desired screenshots** in the `/screenshots` folder.
 3. Run `VALScoreboardTracker.exe`.
 4. All the stats from the screenshots are now copied to your clipboard and saved in `scoreboard.csv`!
 5. Fill your Scrim Tracker with the data and enjoy! 🤙🏼
 
-*\* (if teamsorting is set to true, it will look for the team tag in the screenshots. if it is set to false, it will look for the exact player names matches)*
+*\*if teamsorting is set to true, it will look for the team tag in the screenshots. if it is set to false, it will look for the exact player names matches*
+*\**screenshots need to be in english 16:9 resolution*
 ### Example Screenshot
 
 <p align="center">
