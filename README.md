@@ -67,7 +67,7 @@ We've created a Google Spreadsheet template you can use to track your team's sta
 
 ## 🛠 Built By
 
-Lovingly put together by **Felox** ([Twitter/X](https://x.com/felox210)) & **summonN** ([Twitter/X](https://x.com/summonhalfa)).
+Lovingly put together by **[Felox](https://x.com/felox210)** & **[summonN](https://x.com/summonhalfa)**.
 
 <sub> Special thanks to [**Aplox**](https://twitter.com/_Aplox) for publishing the original version and **isaacaudet** for the agent recognition library. </sub>
 
