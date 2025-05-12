@@ -5,6 +5,10 @@
 </p>
 
 <p align="center">
+  <img src="https://i.imgur.com/lgDp0TA.jpeg" width=800 alt="VALScoreboardTracker Banner"/>
+</p>
+
+<p align="center">
   Extract Valorant end-game scoreboard data from screenshots and convert it into a CSV, optimized for team environments. 
 </p>
 
