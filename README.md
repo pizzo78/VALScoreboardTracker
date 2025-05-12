@@ -65,7 +65,7 @@ We've created a Google Spreadsheet template you can use to track your team's sta
 
 ---
 
-## 📚 References
+## 🛠 Built By
 
 Lovingly put together by **Felox** ([Twitter/X](https://x.com/felox210)) & **summonN** ([Twitter/X](https://x.com/summonhalfa)).
 
