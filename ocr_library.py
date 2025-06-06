@@ -11,6 +11,7 @@ import numpy as np
 import pytesseract
 import logging
 from agent_recognition import find_matching_agent, load_images_from_folder
+from ocr_improvements import enhanced_ocr
 
 #Setting up tesseract - only needs this if you have directly installed tesseract (I think).
 pytesseract.pytesseract.tesseract_cmd = "tesseract"
@@ -482,27 +483,40 @@ class functions:
         non_overlapping_rectangles = list(set(non_overlapping_rectangles))
         return non_overlapping_rectangles
 
-    def read_table_rows(cell_images_rows):
+    def read_table_rows(cell_images_rows, headshot_images_rows=None):
         """
         Reads each player's stats from a table represented by a list of rows images.
-        Processes the images, reads them using OCR and writes a list for output.
+        Enhanced with leet speak detection and highlighted player recognition.
 
         Parameters:
         cell_image_rows (list): A list of rows images, each containing cells representing a player's stats.
+        headshot_images_rows (list): A list of headshot images for highlighted player detection.
 
         Returns:
         output (list): A list of lists, where each sublist contains the player's name and stats in string format.
-                       The sublists are sorted by player name in alphabetical order.
         """
         n=0
         output=[]
         scale = 10
-        logging.info("Reading each players stats, please wait.")
-        for row in cell_images_rows:
+        logging.info("Reading each players stats with enhanced OCR, please wait.")
+        
+        for i, row in enumerate(cell_images_rows):
             temp_output=[]
             n+=1
             # cv2.imwrite("debug/test_rows" +str(n) + ".png", row[0]) # for debugging
             image=row[0]
+            
+            # Check if this player is highlighted (yellow background)
+            is_highlighted = False
+            if headshot_images_rows and i < len(headshot_images_rows):
+                try:
+                    is_highlighted, _ = enhanced_ocr.detect_highlighted_player(
+                        headshot_images_rows[i][0], row
+                    )
+                    if is_highlighted:
+                        logging.info(f"Detected highlighted player in row {n}")
+                except Exception as e:
+                    logging.warning(f"Failed to detect highlighting for row {n}: {e}")
 
             #Seperate rows
             cells=functions.row_seperator(image,(9,9))
@@ -516,25 +530,46 @@ class functions:
                 cells=functions.row_seperator(image,(11,11))
                 cells=sorted(cells,key=lambda x:x[0])
                 cells = [c for c in cells if c[0] > (0.24*(row[0].shape[1]))]
-            #This is in here for debugging.
-            #Draw on each cell to check
-            #This makes the code bug out. Helpful to debug and see the boxes but seems to draw rectangles on wrong image?
-            # for cnt in cells:
-            #    x, y, w, h = cnt
-            #    cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 2)
-            # cv2.imwrite("debug/yo-" + str(n) + ".png", image)
 
             #Process image for OCR
             image=functions.image_process(image)
-            name=image[0:100*scale,0:300*scale]
-            # cv2.imwrite("debug/name-" + str(n) + ".png",name)
-
-            #OCR the name.
-            ocr_name = functions.ocr_image(name, '-c tessedit_char_whitelist=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/_ --psm 7', 'eng+kor+jpn+chi_sim')
+            name_region=image[0:100*scale,0:300*scale]
+            
+            # Enhanced name OCR with leet speak detection
+            try:
+                # Preprocess the name image
+                processed_name = enhanced_ocr.preprocess_name_image(name_region, is_highlighted)
+                
+                # Use enhanced OCR
+                ocr_name = enhanced_ocr.enhanced_ocr_name(processed_name, is_highlighted)
+                
+                if not ocr_name or ocr_name.strip() == "":
+                    # Fallback to original method
+                    ocr_name = functions.ocr_image(
+                        name_region,
+                        '-c tessedit_char_whitelist=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/_ --psm 7',
+                        'eng+kor+jpn+chi_sim'
+                    )
+                    
+            except Exception as e:
+                logging.warning(f"Enhanced OCR failed for row {n}, using fallback: {e}")
+                # Fallback to original OCR
+                ocr_name = functions.ocr_image(
+                    name_region,
+                    '-c tessedit_char_whitelist=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/_ --psm 7',
+                    'eng+kor+jpn+chi_sim'
+                )
+            
             if str(ocr_name).strip() == "":
                 ocr_name = "err"
-            temp_output.append(str(ocr_name).strip())
-            logging.info("Name: " + str(ocr_name).strip())
+            
+            # Add highlighting indicator to name if detected
+            final_name = str(ocr_name).strip()
+            if is_highlighted and not final_name.startswith("[H]"):
+                final_name = f"[H] {final_name}"  # [H] indicates highlighted player
+                
+            temp_output.append(final_name)
+            logging.info(f"Name: {final_name}" + (" (HIGHLIGHTED)" if is_highlighted else ""))
 
             #OCR each cell to get numbers
             for c, cnt in enumerate(cells):

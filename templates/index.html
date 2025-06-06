@@ -1,0 +1,449 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Screenshots - VAL Scoreboard Tracker{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">
+            <i class="fas fa-upload text-primary"></i>
+            Upload VALORANT Screenshots
+        </h1>
+        <p class="lead">Upload your VALORANT end-game scoreboard screenshots to extract player statistics automatically.</p>
+        <div class="alert alert-info">
+            <i class="fas fa-magic"></i> <strong>Auto-Detection Enabled!</strong>
+            No configuration needed - teams and players are automatically detected from your screenshots.
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="upload-area" id="uploadArea">
+                        <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                        <h4>Drag & Drop Screenshots Here</h4>
+                        <p class="text-muted">or click to browse files</p>
+                        <input type="file" id="fileInput" name="files" multiple accept=".png,.jpg,.jpeg" style="display: none;">
+                        <button type="button" class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                            <i class="fas fa-folder-open"></i> Browse Files
+                        </button>
+                    </div>
+                    
+                    <div id="fileList" class="mt-3" style="display: none;">
+                        <h6>Selected Files:</h6>
+                        <ul id="selectedFiles" class="list-group"></ul>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-success btn-lg" id="uploadBtn">
+                            <i class="fas fa-upload"></i> Process Screenshots
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="clearBtn" onclick="clearFiles()">
+                            <i class="fas fa-trash"></i> Clear
+                        </button>
+                    </div>
+                </form>
+                
+                <div id="loading" class="loading text-center mt-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Processing...</span>
+                    </div>
+                    <p class="mt-2">Processing screenshots... This may take a few moments.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-info-circle"></i> Requirements</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success"></i> 16:9 resolution screenshots</li>
+                    <li><i class="fas fa-check text-success"></i> English language interface</li>
+                    <li><i class="fas fa-check text-success"></i> PNG, JPG, or JPEG format</li>
+                    <li><i class="fas fa-check text-success"></i> End-game scoreboard visible</li>
+                    <li><i class="fas fa-check text-success"></i> Maximum 16MB per file</li>
+                    <li><i class="fas fa-star text-warning"></i> Leet speak names supported</li>
+                    <li><i class="fas fa-highlight text-info"></i> Highlighted players detected</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5><i class="fas fa-cog"></i> Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <a href="{{ url_for('config_page') }}" class="btn btn-outline-primary btn-sm d-block mb-2">
+                    <i class="fas fa-edit"></i> Edit Configuration
+                </a>
+                <button class="btn btn-outline-info btn-sm d-block" data-bs-toggle="modal" data-bs-target="#helpModal">
+                    <i class="fas fa-question-circle"></i> How to Use
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="results" class="mt-4" style="display: none;">
+    <h3><i class="fas fa-chart-bar"></i> Processing Results</h3>
+    
+    <!-- Auto-detection Summary -->
+    <div id="autoDetectionCard" class="card mb-3" style="display: none;">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0"><i class="fas fa-magic"></i> Auto-Detection Results</h5>
+        </div>
+        <div class="card-body">
+            <div id="detectionSummary"></div>
+            <div id="detectedTeams" class="mt-3"></div>
+        </div>
+    </div>
+    
+    <div id="resultsContent"></div>
+    
+    <div id="csvSection" class="mt-4" style="display: none;">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-file-csv"></i> Extracted Data</h5>
+                <button id="downloadBtn" class="btn btn-success btn-sm">
+                    <i class="fas fa-download"></i> Download CSV
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="dataTable" class="table table-striped table-sm">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Date</th>
+                                <th>Player</th>
+                                <th>Map</th>
+                                <th>Agent</th>
+                                <th>Score</th>
+                                <th>Kills</th>
+                                <th>Deaths</th>
+                                <th>Assists</th>
+                                <th>ACS</th>
+                                <th>K/D</th>
+                                <th>ADR</th>
+                                <th>HS%</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dataTableBody">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-3">
+                    <textarea id="csvData" class="form-control" rows="5" placeholder="CSV data will appear here..." readonly></textarea>
+                    <small class="text-muted">You can copy this data directly to your spreadsheet using semicolon (;) as delimiter.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Help Modal -->
+<div class="modal fade" id="helpModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-question-circle"></i> How to Use</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6>Step-by-Step Guide:</h6>
+                <ol>
+                    <li><strong>Configure Settings:</strong> Go to Configuration page and set your team tag or player names.</li>
+                    <li><strong>Take Screenshots:</strong> Capture end-game scoreboard screenshots in VALORANT (16:9 resolution, English).</li>
+                    <li><strong>Upload Files:</strong> Drag and drop or browse to select your screenshot files.</li>
+                    <li><strong>Process Data:</strong> Click "Process Screenshots" and wait for the analysis to complete.</li>
+                    <li><strong>Download Results:</strong> Download the CSV file or copy the data to your spreadsheet.</li>
+                </ol>
+                
+                <h6 class="mt-4">Supported Features:</h6>
+                <ul>
+                    <li>Automatic agent recognition</li>
+                    <li>Map detection</li>
+                    <li>Player statistics extraction</li>
+                    <li>Team/player filtering</li>
+                    <li>CSV export with semicolon delimiter</li>
+                    <li><strong>Enhanced OCR:</strong> Leet speak detection (3l1t3, h4x0r, etc.)</li>
+                    <li><strong>Highlighted Players:</strong> Automatic detection of yellow-highlighted players</li>
+                    <li><strong>Smart Filtering:</strong> Automatic team and player detection</li>
+                </ul>
+                
+                <h6 class="mt-4">OCR Improvements:</h6>
+                <ul>
+                    <li><strong>Leet Speak:</strong> Converts 1337 sp34k to normal text automatically</li>
+                    <li><strong>Highlighted Detection:</strong> Players with yellow background are marked as [H]</li>
+                    <li><strong>Multiple OCR Attempts:</strong> Uses different configurations for best results</li>
+                    <li><strong>Confidence Scoring:</strong> Selects the most accurate OCR result</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let selectedFiles = [];
+let csvContent = '';
+
+// File input handling
+document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+document.getElementById('uploadForm').addEventListener('submit', handleUpload);
+
+// Drag and drop handling
+const uploadArea = document.getElementById('uploadArea');
+uploadArea.addEventListener('dragover', handleDragOver);
+uploadArea.addEventListener('dragleave', handleDragLeave);
+uploadArea.addEventListener('drop', handleDrop);
+uploadArea.addEventListener('click', () => document.getElementById('fileInput').click());
+
+function handleDragOver(e) {
+    e.preventDefault();
+    uploadArea.classList.add('dragover');
+}
+
+function handleDragLeave(e) {
+    e.preventDefault();
+    uploadArea.classList.remove('dragover');
+}
+
+function handleDrop(e) {
+    e.preventDefault();
+    uploadArea.classList.remove('dragover');
+    const files = Array.from(e.dataTransfer.files);
+    updateFileList(files);
+}
+
+function handleFileSelect(e) {
+    const files = Array.from(e.target.files);
+    updateFileList(files);
+}
+
+function updateFileList(files) {
+    selectedFiles = files.filter(file => {
+        const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+        return validTypes.includes(file.type) && file.size <= 16 * 1024 * 1024;
+    });
+    
+    const fileList = document.getElementById('fileList');
+    const selectedFilesList = document.getElementById('selectedFiles');
+    
+    if (selectedFiles.length > 0) {
+        fileList.style.display = 'block';
+        selectedFilesList.innerHTML = '';
+        
+        selectedFiles.forEach((file, index) => {
+            const li = document.createElement('li');
+            li.className = 'list-group-item d-flex justify-content-between align-items-center';
+            li.innerHTML = `
+                <span><i class="fas fa-image text-primary"></i> ${file.name}</span>
+                <span class="badge bg-secondary">${(file.size / 1024 / 1024).toFixed(2)} MB</span>
+            `;
+            selectedFilesList.appendChild(li);
+        });
+    } else {
+        fileList.style.display = 'none';
+    }
+}
+
+function clearFiles() {
+    selectedFiles = [];
+    document.getElementById('fileInput').value = '';
+    document.getElementById('fileList').style.display = 'none';
+    document.getElementById('results').style.display = 'none';
+}
+
+async function handleUpload(e) {
+    e.preventDefault();
+    
+    if (selectedFiles.length === 0) {
+        alert('Please select at least one screenshot file.');
+        return;
+    }
+    
+    const formData = new FormData();
+    selectedFiles.forEach(file => {
+        formData.append('files', file);
+    });
+    
+    // Show loading
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('uploadBtn').disabled = true;
+    
+    try {
+        const response = await fetch('/upload', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            displayResults(result);
+        } else {
+            throw new Error(result.error || 'Upload failed');
+        }
+    } catch (error) {
+        alert('Error: ' + error.message);
+    } finally {
+        // Hide loading
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('uploadBtn').disabled = false;
+    }
+}
+
+function displayResults(result) {
+    const resultsDiv = document.getElementById('results');
+    const resultsContent = document.getElementById('resultsContent');
+    
+    resultsDiv.style.display = 'block';
+    resultsContent.innerHTML = '';
+    
+    // Display auto-detection results if available
+    if (result.auto_detection && result.auto_detection.enabled) {
+        displayAutoDetectionResults(result.auto_detection);
+    }
+    
+    // Display processing results for each file
+    result.results.forEach(fileResult => {
+        const card = document.createElement('div');
+        card.className = 'card result-card';
+        
+        const statusIcon = fileResult.status === 'success' ?
+            '<i class="fas fa-check-circle status-success"></i>' :
+            '<i class="fas fa-exclamation-circle status-error"></i>';
+        
+        let successMessage = '';
+        if (fileResult.status === 'success') {
+            const rawCount = fileResult.raw_count || 0;
+            const filteredCount = fileResult.filtered_count || 0;
+            successMessage = `Successfully processed - ${rawCount} players found, ${filteredCount} records after auto-filtering`;
+        }
+        
+        card.innerHTML = `
+            <div class="card-body">
+                <h6>${statusIcon} ${fileResult.filename}</h6>
+                ${fileResult.status === 'success' ?
+                    `<p class="text-success mb-0">${successMessage}</p>` :
+                    `<p class="text-danger mb-0">Error: ${fileResult.error}</p>`
+                }
+            </div>
+        `;
+        
+        resultsContent.appendChild(card);
+    });
+    
+    // Display CSV data if available
+    if (result.csv_content && result.total_records > 0) {
+        csvContent = result.csv_content;
+        document.getElementById('csvSection').style.display = 'block';
+        document.getElementById('csvData').value = csvContent;
+        
+        // Populate table
+        populateDataTable(result.csv_content);
+    }
+}
+
+function displayAutoDetectionResults(autoDetection) {
+    const autoDetectionCard = document.getElementById('autoDetectionCard');
+    const detectionSummary = document.getElementById('detectionSummary');
+    const detectedTeams = document.getElementById('detectedTeams');
+    
+    autoDetectionCard.style.display = 'block';
+    
+    // Display summary
+    const config = autoDetection.config_used;
+    const summaryHtml = `
+        <div class="row">
+            <div class="col-md-8">
+                <h6><i class="fas fa-info-circle"></i> Detection Summary</h6>
+                <p class="mb-2">${autoDetection.summary}</p>
+                <div class="d-flex gap-3">
+                    <span class="badge bg-${config.team_sorting ? 'primary' : 'secondary'}">
+                        ${config.team_sorting ? 'Team Tag Filtering' : 'Player Name Filtering'}
+                    </span>
+                    ${config.team_tag ? `<span class="badge bg-info">Team: ${config.team_tag}</span>` : ''}
+                    <span class="badge bg-success">${config.player_count} Players</span>
+                </div>
+            </div>
+            <div class="col-md-4 text-end">
+                <i class="fas fa-robot fa-3x text-info"></i>
+            </div>
+        </div>
+    `;
+    detectionSummary.innerHTML = summaryHtml;
+    
+    // Display detected teams if available
+    if (autoDetection.detected_teams && Object.keys(autoDetection.detected_teams).length > 0) {
+        let teamsHtml = '<h6><i class="fas fa-users"></i> Detected Teams</h6><div class="row">';
+        
+        Object.entries(autoDetection.detected_teams).forEach(([teamName, players]) => {
+            teamsHtml += `
+                <div class="col-md-6 mb-2">
+                    <div class="card border-light">
+                        <div class="card-body p-2">
+                            <h6 class="card-title mb-1">${teamName}</h6>
+                            <small class="text-muted">${players.length} players:</small>
+                            <div class="mt-1">
+                                ${players.map(player => `<span class="badge bg-light text-dark me-1">${player}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        teamsHtml += '</div>';
+        detectedTeams.innerHTML = teamsHtml;
+    } else {
+        detectedTeams.innerHTML = '';
+    }
+}
+
+function populateDataTable(csvData) {
+    const tbody = document.getElementById('dataTableBody');
+    tbody.innerHTML = '';
+    
+    const rows = csvData.trim().split('\n');
+    rows.forEach(row => {
+        const cells = row.split(';');
+        if (cells.length >= 4) {
+            const tr = document.createElement('tr');
+            cells.forEach(cell => {
+                const td = document.createElement('td');
+                td.textContent = cell.trim();
+                tr.appendChild(td);
+            });
+            tbody.appendChild(tr);
+        }
+    });
+}
+
+// Download CSV
+document.getElementById('downloadBtn').addEventListener('click', function() {
+    if (csvContent) {
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `valorant_scoreboard_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+    }
+});
+</script>
+{% endblock %}

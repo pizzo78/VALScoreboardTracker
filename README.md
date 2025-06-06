@@ -9,14 +9,50 @@
 </p>
 
 <p align="center">
-  Extract Valorant end-game scoreboard data from 16:9 english screenshots and convert it into a CSV, optimized for team environments. 
+  Extract Valorant end-game scoreboard data from 16:9 english screenshots and convert it into a CSV, optimized for team environments. Now available as both desktop application and web interface with automatic team detection!
 </p>
 
-### 📥 Download Page
-Download the latest version from our [GitHub Releases](https://github.com/Felox210/VALScoreboardTracker/releases/tag/stable) page.
+### 📥 Download Options
+- **Desktop App**: Download the latest version from our [GitHub Releases](https://github.com/Felox210/VALScoreboardTracker/releases/tag/stable) page.
+- **Web App**: Run locally using Python (see instructions below)
 
-## 🚀 How to Use
+## 🌐 Web Application (NEW!)
 
+### Quick Start
+1. **Install Python 3.7+** and required dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Start the web server**:
+   ```bash
+   python run_webapp.py
+   ```
+   Or directly:
+   ```bash
+   python app.py
+   ```
+
+3. **Open your browser** to `http://localhost:5000`
+
+4. **Configure settings** in the web interface or edit `config.ini`
+
+5. **Upload screenshots** via drag-and-drop or file browser
+
+6. **Download results** as CSV or copy data directly to your spreadsheet
+
+### Web Features
+- 🖱️ **Drag & Drop Interface** - Easy file uploads
+- 🤖 **Auto-Detection** - Automatically detects teams and players from screenshots
+- ⚙️ **Web-based Configuration** - Optional manual configuration if needed
+- 📊 **Real-time Results** - See processing results immediately
+- 📁 **Batch Processing** - Upload multiple screenshots at once
+- 💾 **Instant Download** - Get CSV files with one click
+- 📱 **Responsive Design** - Works on desktop and mobile
+
+## 🖥️ Desktop Application (Classic)
+
+### How to Use
 1. Fill `config.ini` file with your `TEAMTAG` or `PLAYERNAMES`*.
 2. Place your desired screenshots** in the `/screenshots` folder.
 3. Run `VALScoreboardTracker.exe`.
@@ -63,6 +99,30 @@ We've created a Google Spreadsheet template you can use to track your team's sta
 <p align="center">
   <img src="https://i.imgur.com/uIJxuQW.png" width=1000 alt="VALScoreboardTracker Example Tracker"/>
 </p>
+
+---
+
+## 🛠 Tech Stack
+
+### Web Application
+- **Backend**: Python Flask
+- **Frontend**: HTML5, CSS3, JavaScript (Bootstrap 5)
+- **Image Processing**: OpenCV, Tesseract OCR
+- **File Handling**: Werkzeug, Pillow
+- **Data Export**: CSV with semicolon delimiter
+
+### Core Libraries
+- **Computer Vision**: OpenCV for image processing and table detection
+- **OCR Engine**: Tesseract for text recognition
+- **Agent Recognition**: SIFT/ORB feature matching algorithms
+- **Web Framework**: Flask for HTTP server and routing
+- **UI Framework**: Bootstrap 5 for responsive design
+
+### Deployment Options
+- **Local Development**: Run with `python app.py` or `python run_webapp.py`
+- **Production**: Deploy to any Python-compatible hosting service
+- **Docker**: Container support for easy deployment
+- **Desktop**: Original executable version available
 
 ---
 

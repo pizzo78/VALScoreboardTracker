@@ -1,0 +1,221 @@
+{% extends "base.html" %}
+
+{% block title %}Configuration - VAL Scoreboard Tracker{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="mb-4">
+            <i class="fas fa-cog text-primary"></i>
+            Configuration Settings
+        </h1>
+        <p class="lead">Configure your team settings and filtering options for scoreboard data extraction.</p>
+        <div class="alert alert-warning">
+            <i class="fas fa-info-circle"></i> <strong>Optional Configuration:</strong>
+            Teams and players are now automatically detected from screenshots. Manual configuration is only needed for specific filtering requirements.
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-edit"></i> Team & Player Settings</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('update_config') }}">
+                    <div class="mb-3">
+                        <label for="team" class="form-label">Team Tag</label>
+                        <input type="text" class="form-control" id="team" name="team" 
+                               value="{{ config.team if config else '' }}" 
+                               placeholder="e.g., NOVO, TSM, SEN">
+                        <div class="form-text">Enter your team's tag/prefix that appears in player names.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="players" class="form-label">Player Names</label>
+                        <textarea class="form-control" id="players" name="players" rows="3" 
+                                  placeholder="Enter player names separated by commas">{{ config.players | join(', ') if config and config.players else '' }}</textarea>
+                        <div class="form-text">Enter exact player names separated by commas. Used when team sorting is disabled.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="teamSorting" name="teamSorting" 
+                                   {{ 'checked' if config and config.teamSorting else '' }}>
+                            <label class="form-check-label" for="teamSorting">
+                                Enable Team Tag Filtering
+                            </label>
+                        </div>
+                        <div class="form-text">
+                            When enabled, filters players by team tag. When disabled, filters by exact player names.
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="maps" class="form-label">Supported Maps</label>
+                        <textarea class="form-control" id="maps" name="maps" rows="4" 
+                                  placeholder="Enter map names separated by commas">{{ config.maps | join(', ') if config and config.maps else '' }}</textarea>
+                        <div class="form-text">List of VALORANT maps for recognition. Add new maps as they are released.</div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="button" class="btn btn-secondary me-md-2" onclick="resetToDefaults()">
+                            <i class="fas fa-undo"></i> Reset to Defaults
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Configuration
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-info-circle"></i> Configuration Help</h5>
+            </div>
+            <div class="card-body">
+                <h6>Team Tag Filtering</h6>
+                <p class="small">When enabled, the tool will extract data for all players whose names contain the specified team tag.</p>
+                
+                <h6>Player Name Filtering</h6>
+                <p class="small">When team tag filtering is disabled, the tool will only extract data for players whose names exactly match those in the player list.</p>
+                
+                <h6>Map Recognition</h6>
+                <p class="small">The tool uses fuzzy matching to identify maps from screenshots. Ensure map names are spelled correctly.</p>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5><i class="fas fa-list"></i> Current Settings</h5>
+            </div>
+            <div class="card-body">
+                {% if config %}
+                <dl class="row">
+                    <dt class="col-sm-5">Team Tag:</dt>
+                    <dd class="col-sm-7">{{ config.team or 'Not set' }}</dd>
+                    
+                    <dt class="col-sm-5">Team Filtering:</dt>
+                    <dd class="col-sm-7">
+                        <span class="badge bg-{{ 'success' if config.teamSorting else 'secondary' }}">
+                            {{ 'Enabled' if config.teamSorting else 'Disabled' }}
+                        </span>
+                    </dd>
+                    
+                    <dt class="col-sm-5">Players:</dt>
+                    <dd class="col-sm-7">{{ config.players | length if config.players else 0 }} configured</dd>
+                    
+                    <dt class="col-sm-5">Maps:</dt>
+                    <dd class="col-sm-7">{{ config.maps | length if config.maps else 0 }} supported</dd>
+                </dl>
+                {% else %}
+                <p class="text-muted">No configuration found. Default settings will be created when you save.</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5><i class="fas fa-gamepad"></i> Supported Agents</h5>
+            </div>
+            <div class="card-body">
+                <p class="small">The tool can recognize the following agents:</p>
+                <div class="row g-1">
+                    <div class="col-4"><small>Astra</small></div>
+                    <div class="col-4"><small>Breach</small></div>
+                    <div class="col-4"><small>Brimstone</small></div>
+                    <div class="col-4"><small>Chamber</small></div>
+                    <div class="col-4"><small>Clove</small></div>
+                    <div class="col-4"><small>Cypher</small></div>
+                    <div class="col-4"><small>Deadlock</small></div>
+                    <div class="col-4"><small>Fade</small></div>
+                    <div class="col-4"><small>Gekko</small></div>
+                    <div class="col-4"><small>Harbor</small></div>
+                    <div class="col-4"><small>Iso</small></div>
+                    <div class="col-4"><small>Jett</small></div>
+                    <div class="col-4"><small>KAY/O</small></div>
+                    <div class="col-4"><small>Killjoy</small></div>
+                    <div class="col-4"><small>Neon</small></div>
+                    <div class="col-4"><small>Omen</small></div>
+                    <div class="col-4"><small>Phoenix</small></div>
+                    <div class="col-4"><small>Raze</small></div>
+                    <div class="col-4"><small>Reyna</small></div>
+                    <div class="col-4"><small>Sage</small></div>
+                    <div class="col-4"><small>Skye</small></div>
+                    <div class="col-4"><small>Sova</small></div>
+                    <div class="col-4"><small>Tejo</small></div>
+                    <div class="col-4"><small>Viper</small></div>
+                    <div class="col-4"><small>Vyse</small></div>
+                    <div class="col-4"><small>Yoru</small></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function resetToDefaults() {
+    if (confirm('Are you sure you want to reset to default settings? This will overwrite your current configuration.')) {
+        document.getElementById('team').value = 'NOVO';
+        document.getElementById('players').value = 'swagzor, NOVO Kamisseq, NOVO insider, NOVO BULD, NOVO KATU';
+        document.getElementById('teamSorting').checked = false;
+        document.getElementById('maps').value = 'Haven, Fracture, Bind, Ascent, Icebox, Split, Breeze, Lotus, Pearl, Sunset, Abyss';
+    }
+}
+
+// Form validation
+document.querySelector('form').addEventListener('submit', function(e) {
+    const team = document.getElementById('team').value.trim();
+    const players = document.getElementById('players').value.trim();
+    const teamSorting = document.getElementById('teamSorting').checked;
+    const maps = document.getElementById('maps').value.trim();
+    
+    if (!maps) {
+        e.preventDefault();
+        alert('Please specify at least one map.');
+        return;
+    }
+    
+    if (teamSorting && !team) {
+        e.preventDefault();
+        alert('Please specify a team tag when team filtering is enabled.');
+        return;
+    }
+    
+    if (!teamSorting && !players) {
+        e.preventDefault();
+        alert('Please specify player names when team filtering is disabled.');
+        return;
+    }
+});
+
+// Toggle help text based on team sorting checkbox
+document.getElementById('teamSorting').addEventListener('change', function() {
+    const teamInput = document.getElementById('team');
+    const playersInput = document.getElementById('players');
+    
+    if (this.checked) {
+        teamInput.style.borderColor = '#28a745';
+        playersInput.style.borderColor = '#6c757d';
+    } else {
+        teamInput.style.borderColor = '#6c757d';
+        playersInput.style.borderColor = '#28a745';
+    }
+});
+
+// Initialize border colors on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const teamSortingCheckbox = document.getElementById('teamSorting');
+    if (teamSortingCheckbox) {
+        teamSortingCheckbox.dispatchEvent(new Event('change'));
+    }
+});
+</script>
+{% endblock %}
